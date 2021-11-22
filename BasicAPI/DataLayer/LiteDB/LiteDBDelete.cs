@@ -15,7 +15,7 @@ namespace DataLayer.LiteDB
             ValidateconnectionString();
         }
 
-        public int Delete(DbEntityBase data)
+        public int DeleteById<T>(string id)
         {
             var result = 0;
 
@@ -24,12 +24,13 @@ namespace DataLayer.LiteDB
                 using (var db = new LiteDatabase(_connectionString))
                 {
                     // Get a collection (or create, if doesn't exist)
-                    var colName = GetCollectionName<DbEntityBase>();
-                    var col = db.GetCollection<DbEntityBase>(colName);
+                    var colName = GetCollectionName<T>();
+                    var col = db.GetCollection<T>(colName);
 
-                    var deleteQuery = $"DELETE {colName} WHERE _id == {data.Id}";
-                    col.DeleteMany(deleteQuery);
-                    //col.Delete(data.Id);
+                    //var deleteQuery = $"DELETE {colName} WHERE _id == {data.Id}";
+                    //col.DeleteMany(deleteQuery);
+                    var sucess = col.Delete(id);
+                    result = sucess ? 1 : 0;
                 }
             }
             catch (Exception)

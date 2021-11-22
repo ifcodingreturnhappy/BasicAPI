@@ -36,6 +36,28 @@ namespace DataLayer.LiteDB
             return result;
         }
 
+        public T ReadById<T>(string id)
+        {
+            T result = default(T);
+
+            try
+            {
+                using (var db = new LiteDatabase(_connectionString))
+                {
+                    // Get a collection (or create, if doesn't exist)
+                    var col = db.GetCollection<T>(GetCollectionName<T>());
+
+                    result = col.FindById(id);
+                }
+            }
+            catch (Exception)
+            {
+                // Log
+            }
+
+            return result;
+        }
+
         public int GetCount<T>()
         {
             int result = 0;

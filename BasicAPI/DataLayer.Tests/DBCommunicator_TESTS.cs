@@ -68,7 +68,7 @@ namespace Tests
             var sampleSize = 10;
             var sample = GetSampleData(10);
 
-            var result = writer.Write(sample, true);
+            var result = writer.Insert(sample, true);
 
             Assert.Equal(sampleSize, result);
         }
@@ -158,7 +158,7 @@ namespace Tests
             IDBDeleter deleter = new LiteDBDelete(connectionString_WORKS.First());
 
             var idToDelete = 1;
-            var result = deleter.Delete(new SampleDataModel { Id = idToDelete });
+            var result = deleter.DeleteById(new SampleDataModel { Id = idToDelete });
 
             Assert.NotEqual(0, result);
         }
@@ -179,7 +179,7 @@ namespace Tests
                 var sampleSize = 10;
                 var sample = GetSampleData(sampleSize);
 
-                writer.Write(sample, true);
+                writer.Insert(sample, true);
             }
         }
 

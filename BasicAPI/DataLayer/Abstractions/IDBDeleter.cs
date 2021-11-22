@@ -18,8 +18,8 @@ namespace DataLayer.Abstractions
         /// Deletes the item for the given id.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public int Delete(DbEntityBase data);
+        public int DeleteById<T>(string id);
     }
 }

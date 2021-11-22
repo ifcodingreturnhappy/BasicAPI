@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataLayer.Abstractions
 {
@@ -14,6 +15,7 @@ namespace DataLayer.Abstractions
         /// <param name="data"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public int Write<T>(IEnumerable<T> data, bool update);
+        public int Write<T>(IEnumerable<T> data, bool update = true);
+        Task<int> WriteAsync<T>(IEnumerable<T> data, bool update = true);
     }
 }

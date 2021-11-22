@@ -1,0 +1,3 @@
+﻿- Add Unit tests to the Auth Controller
+- Integrate Adress/Phone validators with the Auth controller
+- Add PayPal payments 

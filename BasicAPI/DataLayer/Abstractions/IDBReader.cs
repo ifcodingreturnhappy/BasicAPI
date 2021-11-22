@@ -15,5 +15,6 @@ namespace DataLayer.Abstractions
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public IEnumerable<T> ReadAll<T>();
+        T ReadById<T>(string id);
     }
 }

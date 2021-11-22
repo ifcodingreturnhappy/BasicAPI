@@ -3,6 +3,7 @@ using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataLayer.LiteDB
 {
@@ -14,7 +15,8 @@ namespace DataLayer.LiteDB
         }
 
 
-        public int Write<T>(IEnumerable<T> data, bool update)
+        // TODO: Refactor into two methods (insert and update)
+        public int Write<T>(IEnumerable<T> data, bool update = true)
         {
             var result = 0;
 
@@ -27,7 +29,7 @@ namespace DataLayer.LiteDB
 
                     // Add objects to the collection
                     if (update)
-                        result = col.Upsert(data);
+                        result = col.Update(data);
                     else
                         result = col.Insert(data);
                 }
@@ -37,6 +39,16 @@ namespace DataLayer.LiteDB
                 // Log
                 result = -1;
             }
+
+            return result;
+        }
+
+        public async Task<int> WriteAsync<T>(IEnumerable<T> data, bool update = true)
+        {
+            var result = await Task.Run(() =>
+            {
+                return Write(data, update);
+            });
 
             return result;
         }
