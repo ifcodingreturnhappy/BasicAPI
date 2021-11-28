@@ -1,4 +1,5 @@
 using API.Services;
+using API.Services.Logging;
 using DataLayer;
 using DataLayer.Abstractions;
 using DataLayer.LiteDB;
@@ -32,8 +33,8 @@ namespace API
             InitializeDependencyInjection(services);
 
             // Initialize token secret
-            var settings = AuthSettings.GetSettings(Configuration);
-            services.AddSingleton(settings);
+            var authSettings = AuthSettings.GetSettings(Configuration);
+            services.AddSingleton(authSettings);
 
             services.AddAuthentication(x =>
             {
@@ -47,7 +48,7 @@ namespace API
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.AUTH_SECRET)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authSettings.AUTH_SECRET)),
                     ClockSkew = TimeSpan.Zero,
                     ValidateLifetime = true,
                     ValidateIssuer = false,
@@ -85,6 +86,9 @@ namespace API
             services.AddTransient<IDBReader>( _ => new LiteDBRead(Configuration.GetConnectionString("DEV"))); // TODO: Change hard coded to dynamic according to release type
             services.AddTransient<IDBDeleter>( _ => new LiteDBDelete(Configuration.GetConnectionString("DEV"))); // TODO: Change hard coded to dynamic according to release type
             services.AddTransient<IPasswordHasherService, HMACHashingService>();
+
+            services.AddTransient<DiscordLogger>();
+
         }
     }
 }

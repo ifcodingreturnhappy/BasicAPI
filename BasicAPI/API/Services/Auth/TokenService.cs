@@ -1,4 +1,4 @@
-﻿using DataLayer.Models;
+﻿using DataModels.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
