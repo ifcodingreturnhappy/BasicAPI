@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -26,7 +27,8 @@ namespace DataModels.Authentication
                 string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
                 var regex = new Regex(pattern, RegexOptions.IgnoreCase);
                 
-                return regex.IsMatch(Email) && Email.Length <= maxEmailSize;
+                var output = regex.IsMatch(Email) && Email.Length <= maxEmailSize;
+                return output;
             }
             catch (Exception)
             {
@@ -111,8 +113,11 @@ namespace DataModels.Authentication
         }
 
 
+        [JsonIgnore]
         public GeoCoordinates Coordinates { get; set; }
+        [JsonIgnore]
         public Role Role { get; set; }
+        [JsonIgnore]
         public string Salt { get; set; }
 
 

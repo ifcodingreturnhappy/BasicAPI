@@ -1,11 +1,13 @@
-﻿- Add Unit tests to the Auth Controller
-- Integrate Adress/Phone validators with the Auth controller
-- Add max size and other restraints to the userinfo data model
+﻿- Add Unit tests to all Controllers
 - Add PayPal payments 
-- Add discord logger
-- Add controller to retrieve the available meals 
 - Add database versioning control
 - create request result schema (remove hard-coded values from anonymous objects)
+- pass all DB methods to async
+- add admin account
 
-
-DONE - Add minimum password requiremets
+DONE: 
+- Add minimum password requiremets
+- Integrate Adress/Phone validators with the Auth controller
+- Add max size and other restraints to the userinfo data model
+- Add discord logger
+- Add controller to retrieve the available meals 
