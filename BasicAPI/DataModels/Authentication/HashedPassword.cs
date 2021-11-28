@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace DataLayer.Models
+namespace DataModels.Authentication
 {
     public class HashedPassword
     {

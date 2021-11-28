@@ -1,4 +1,4 @@
-﻿using DataLayer.Models;
+﻿using DataModels.Authentication;
 using System.Threading.Tasks;
 
 namespace API.Services

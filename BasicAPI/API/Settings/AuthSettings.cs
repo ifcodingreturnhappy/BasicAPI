@@ -11,6 +11,8 @@ namespace API
             try
             {
                 output.AUTH_SECRET = configuration.GetSection(nameof(AuthSettings.AUTH_SECRET)).Value;
+                output.DISCORD_WEBHOOK = configuration.GetSection(nameof(AuthSettings.DISCORD_WEBHOOK)).Value;
+                output.DISCORD_USERNAME = configuration.GetSection(nameof(AuthSettings.DISCORD_USERNAME)).Value;
             }
             catch (System.Exception)
             {
@@ -21,5 +23,7 @@ namespace API
         }
 
         public string AUTH_SECRET { get; set; }
+        public string DISCORD_WEBHOOK { get; set; }
+        public string DISCORD_USERNAME { get; set; }
     }
 }

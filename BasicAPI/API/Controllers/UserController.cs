@@ -1,6 +1,6 @@
 ﻿using API.Services;
 using DataLayer.Abstractions;
-using DataLayer.Models;
+using DataModels.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,34 +34,51 @@ namespace API.Controllers
         [Route("register")]
         public async Task<ActionResult<dynamic>> Register([FromBody] User user)
         {
-            // Check if the user sign in data is valid 
-            if(!user.HasValidData())
-                return new { message = "Invalid data." };
-
-            // Check if user does not exist yet
-            var userExists = _dbReader.ReadById<User>(user.Email) != null;
-
-            if(userExists)
-                return new { Error = "Email already taken." };
-            else
+            try
             {
-                // Hash the password
-                var hashedPassword = await _passwordHasherService.HashPassword(user.Password);
-                user.Role = "employee";
-                user.Password = hashedPassword.Hash;
-                user.Salt = hashedPassword.Salt;
+                // Check if the user sign in data is valid 
+                if (!user.HasValidData())
+                    return new { Message = "Invalid data." };
 
-                // Insert new user in the database
-                var result = await _dbWriter.WriteAsync(new List<User>()
+                // Check if user does not exist yet
+                var userExists = _dbReader.ReadById<User>(user.Email) != null;
+
+                if (userExists)
+                    return new { Error = "Email already taken." };
+                else
                 {
-                    user
-                }, update: false);
+                    // Hash the password
+                    var hashedPassword = await _passwordHasherService.HashPassword(user.Password);
+                    user.Password = hashedPassword.Hash;
+                    user.Salt = hashedPassword.Salt;
 
-                // Response to the sign in
+                    // Set the user as a default client
+                    user.SetAsClient();
+
+                    // Get the coordinates for the user's postal code
+                    await user.GetCoordinatesFromPostalCode();
+
+                    // Insert new user in the database
+                    var result = await _dbWriter.WriteAsync(new List<User>()
+                    {
+                        user
+                    }, update: false);
+
+                    // Response to the sign in
+                    return new
+                    {
+                        Email = user.Email,
+                        Result = result
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                // Log
                 return new
                 {
-                    Email = user.Email,
-                    Result = result
+                    ErrorMessage = "Unable to Create account.",
+                    result = 0
                 };
             }
         }
@@ -165,7 +182,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("employee")]
-        [Authorize(Roles = "employee,manager")]
+        [Authorize(Roles = "Client,Admin")]
         public string Employee() => "Funcionário";
 
         [HttpGet]
