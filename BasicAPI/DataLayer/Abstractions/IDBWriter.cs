@@ -15,7 +15,10 @@ namespace DataLayer.Abstractions
         /// <param name="data"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public int Write<T>(IEnumerable<T> data, bool update = true);
-        Task<int> WriteAsync<T>(IEnumerable<T> data, bool update = true);
+        public int WriteMany<T>(IEnumerable<T> data, bool update = true);
+        Task<int> WriteManyAsync<T>(IEnumerable<T> data, bool update = true);
+
+        int Write<T>(T data, bool update = true);
+        Task<int> WriteAsync<T>(T data, bool update = true);
     }
 }
