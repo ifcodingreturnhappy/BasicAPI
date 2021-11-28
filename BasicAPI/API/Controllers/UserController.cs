@@ -1,4 +1,5 @@
 ﻿using API.Services;
+using API.Services.Logging;
 using DataLayer.Abstractions;
 using DataModels.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -15,19 +16,22 @@ namespace API.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly IPasswordHasherService _passwordHasherService;
+        private readonly DiscordLogger _discordLogger;
 
         private readonly IDBWriter _dbWriter;
         private readonly IDBReader _dbReader;
         private readonly IDBDeleter _dBDeleter;
 
         public UserController(ITokenService tokenService, IPasswordHasherService passwordHasherService,
-            IDBWriter dbWriter, IDBReader dbReader, IDBDeleter dbDeleter)
+            IDBWriter dbWriter, IDBReader dbReader, IDBDeleter dbDeleter, DiscordLogger discordLogger)
         {
             _tokenService = tokenService;
             _passwordHasherService = passwordHasherService;
             _dbWriter = dbWriter;
             _dbReader = dbReader;
             _dBDeleter = dbDeleter;
+            _discordLogger = discordLogger;
+
         }
 
         [HttpPost]
@@ -59,7 +63,7 @@ namespace API.Controllers
                     await user.GetCoordinatesFromPostalCode();
 
                     // Insert new user in the database
-                    var result = await _dbWriter.WriteAsync(new List<User>()
+                    var result = await _dbWriter.WriteManyAsync(new List<User>()
                     {
                         user
                     }, update: false);
@@ -129,7 +133,7 @@ namespace API.Controllers
 
             // Update user data
             userInfo.Password = hashedPassword.Hash;
-            var result = await _dbWriter.WriteAsync(new List<User>
+            var result = await _dbWriter.WriteManyAsync(new List<User>
             {
                 userInfo
             });
